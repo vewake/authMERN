@@ -6,18 +6,15 @@ import UserModel from './models/bd.js'
 import jwt from 'jsonwebtoken'
 
 import routes from './routes/routes.js'
-import { ensureAuth } from './middlewares/jwtValid.js'
 
 import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express()
-//require('dotenv').config X
 const PORT = process.env.PORT || 7500
 const mongo_url = process.env.MONGO_URL
 
 app.use(bodyParser.json())
-// app.use(cors())
 app.use(cors({
   origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -37,7 +34,7 @@ mongoose.connect(mongo_url)
   })
 
 app.get('/ping', (req, res) => {
-  res.send("hello  duniya")
+  res.send("hello  world")
 })
 
 app.post("/me", async (req, res) => {
@@ -63,7 +60,3 @@ app.post("/me", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-//
-// app.use(cors({
-//   origin: 'http://localhost:5173' // Yahan apne frontend ka URL daalein
-// }));
