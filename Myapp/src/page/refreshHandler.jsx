@@ -2,23 +2,12 @@ import React, { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 
-export default function RefrshHandler({ setIsAuthenticated }) {
-    const location = useLocation();
-    const navigate = useNavigate();
+export default function PrivateRoute({ children }) {
 
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            setIsAuthenticated(true);
-            if (location.pathname === '/' ||
-                location.pathname === '/login' ||
-                location.pathname === '/signup'
-            ) {
-                navigate('/home', { replace: false });
-            }
-        }
-    }, [location, navigate, setIsAuthenticated])
+  const location = useLocation();
+  if (!localStorage.getItem('token')) {
+    return window.location.href = '/login';
+  }
 
-    return (
-        null
-    )
+  return children;
 }

@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaCheckCircle, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import '../pages/home.css'
+export function Home() {
 
+  const [userData, setUserData] = useState(null);
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch('http://localhost:7500/me', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: localStorage.getItem('token'), test: 'test',
+        }),
+      });
 
-function Home(){
-    return (
-        <div>
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+
+      const userData = await response.json();
+      setUserData(userData);
+      console.log(userData);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  return (
+    <div>
       <nav className="navbar">
         <div className="logo">ModernUI</div>
         <ul className="nav-links">
@@ -18,8 +46,17 @@ function Home(){
 
       <section id="home" className="hero">
         <h1>Elevate Your Web Experience</h1>
-        <p>Create modern, fast, and responsive websites with ease.</p>
-        <a href="#services" className="btn">Explore Services</a>
+        <p>{userData && <div>
+
+          <h3>Welcome {userData.name}</h3>
+          <h4>{userData.email}</h4>
+          <h5>{userData.password}</h5>
+        </div>}</p>
+        <a href="#services" className="btn" onClick={() => {
+
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }}>Log Out</a>
       </section>
 
       <section id="services" className="services">
@@ -98,10 +135,9 @@ function Home(){
         <p>© 2024 ModernUI. All rights reserved.</p>
       </footer>
     </div>
-    )
+  )
 }
 
-export default Home
 
 
 
