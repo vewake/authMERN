@@ -1,10 +1,8 @@
 import UserModel from '../models/bd.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-// import JWT_SECRET from '.env'
-import { ensureAuth } from '../middlewares/jwtValid.js'
 
-export const signupCont = async (req, res) => {
+export const signupHandel = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const user = await UserModel.findOne({ email });
@@ -33,7 +31,7 @@ export const signupCont = async (req, res) => {
   }
 }
 
-export const loginCont = async (req, res) => {
+export const loginHandle = async (req, res) => {
   try {
 
     const { email, password } = req.body
@@ -77,4 +75,4 @@ export const loginCont = async (req, res) => {
 }
 
 //export default {signupCont, loginCont};
-export default { loginCont, signupCont };
+export default { loginCont: loginHandle, signupCont: signupHandel };
